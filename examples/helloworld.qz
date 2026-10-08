@@ -1,0 +1,5 @@
+import "@std/io/io.qz"
+
+function main(){
+    println("Hello world!");
+}
