@@ -1,0 +1,62 @@
+import "@std/io.qz"
+import "@std/file.qz"
+import "@std/fs/fs.qz"
+import "@std/core/panic.qz"
+
+function createManifest(name: string) : bool {
+    if(not writeFile("manifest.toml", "name = \"" + name + "\"\n")){
+        return false;
+    }   
+    appendFile("manifest.toml", "version = \"1.0.0\"\n");
+    appendFile("manifest.toml", "description = \"\"\n");
+    appendFile("manifest.toml", "license = \"\"\n");
+    appendFile("manifest.toml", "\n[build]\n");
+    appendFile("manifest.toml", "entry = \"src/main.qz\"\n");
+    appendFile("manifest.toml", "libc = true\n");
+    appendFile("manifest.toml", "\n[dependencies]\n");
+    appendFile("manifest.toml", "std = \"1.0.0\"\n");
+    appendFile("manifest.toml", "\n[dev-dependencies]\n");
+    return true;
+}
+
+function initializeProject(){
+    println("Initializing a new Quarzum project...");
+    print("Project name: ");
+    const name = input();
+
+    if(not writeFile(".gitignore", "*.asm\n*.o\nout\ndeps")){
+        panic("Could not create '.gitignore' file");
+    }
+    if(not createManifest(name)){
+        panic("Could not create 'manifest.toml' file");
+    }
+    if(not exists("src") and not makeDir("src")){
+        panic("Could not create 'src/' directory");
+    }
+    if(not exists("test") and not makeDir("test")){
+        panic("Could not create 'test/' directory");
+    }
+    if(not exists("deps") and not makeDir("deps")){
+        panic("Could not create 'deps/' directory");
+    }
+}
+
+function main(args: string[]) {
+
+    if(args.length < 2){
+        eprintln("Usage: quarzum <version|init|build|run>");
+        exit 1;
+    }
+
+    switch(args[1]){
+        case "version":
+            println("Quarzum 1.0.0-SNAPSHOT");
+            exit 0;
+        case "init":
+            initializeProject();
+            break;
+        default:
+            eprintln("Usage: quarzum <version|init|build|run>");
+            exit 1;
+    }
+}

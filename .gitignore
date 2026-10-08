@@ -1,0 +1,4 @@
+*.asm
+*.o
+out
+deps

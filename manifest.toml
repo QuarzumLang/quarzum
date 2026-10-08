@@ -1,0 +1,13 @@
+name = "Quarzum"
+version = "1.0.0"
+description = ""
+license = ""
+
+[build]
+entry = "src/main.qz"
+libc = true
+
+[dependencies]
+std = "1.0.0"
+
+[dev-dependencies]
